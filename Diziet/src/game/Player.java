@@ -17,7 +17,7 @@ public class Player extends GameObject {
 		this.y = y;
 		
 		w = GameParams.screenX/100;
-		h = w;
+		h = w*2;
 		rect = new Rectangle(x,y,w,h);
 	}
 	
@@ -26,9 +26,16 @@ public class Player extends GameObject {
 		graph.drawOval(x, y, w, h);
 	}
 	
-	public void update(GameContainer gameContainer, StateBasedGame sbGame, int delta){
+	public void update(GameContainer gameContainer, StateBasedGame sbGame, int delta, Rectangle ground){
 		rect.setX(x);
 		rect.setY(y);
+		applyGravity(ground);
+	}
+	
+	private void applyGravity(Rectangle ground){
+		if(!GameParams.collision(this, ground, Keyboard.KEY_DOWN)){
+			y++;
+		}
 	}
 
 	public Rectangle getFutureRect(int futurePoint){
@@ -37,13 +44,12 @@ public class Player extends GameObject {
 		temp = rect;
 		
 		switch(futurePoint){
-		
 			case Keyboard.KEY_UP:
 				temp.setY(rect.getY()-1);
 				return temp;
 			
 			case Keyboard.KEY_DOWN:
-				temp.setY(rect.getY()+1);
+				temp.setY(rect.getY());
 				return temp;	
 		
 			case Keyboard.KEY_RIGHT:
@@ -53,9 +59,10 @@ public class Player extends GameObject {
 			case Keyboard.KEY_LEFT:
 				temp.setX(rect.getX()-1);
 				return temp;
+				
+			default:
+				return rect;
 		}
-		
-		return rect;
 	}
 	
 	public Rectangle getRect(){
@@ -63,18 +70,7 @@ public class Player extends GameObject {
 	}
 	
 	public void move(int dir){
-		switch(dir){
-		
-			case Keyboard.KEY_UP:
-				if(y>0)
-					y -= GameParams.moveSpeed;
-				break;
-				
-			case Keyboard.KEY_DOWN:
-				if(y<GameParams.screenY-h)
-					y += GameParams.moveSpeed;
-				break;
-				
+		switch(dir){			
 			case Keyboard.KEY_LEFT:
 				if(x>0)
 					x -= GameParams.moveSpeed;

@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.geom.*;
 
 public final class GameParams {
@@ -21,7 +23,6 @@ public final class GameParams {
 	public static final int		moveSpeed	= GameParams.screenY/720;
 	
 	public static final int		goalSize	= GameParams.screenY/50;
-	//public static float	factor;
 	
 	public static float mapScreenY(int value){
 		if((value>=0)&&(value<=100))
@@ -37,6 +38,23 @@ public final class GameParams {
 			return -1;
 	}
 
+	public static boolean collision(Player player, ArrayList<Rectangle> scene, int direction){
+		for(Rectangle walls:scene){
+			if(walls.intersects(player.getFutureRect(direction))){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean collision(Player player, Rectangle scene, int direction){
+			if(scene.intersects(player.getFutureRect(direction))){
+				return true;
+			}
+		
+		return false;
+	}
+	
 	
 	public static int trigger(Rectangle player, Rectangle wall){
 		int playerNorth, playerSouth, playerWest, playerEast;

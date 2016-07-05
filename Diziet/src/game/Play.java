@@ -23,10 +23,8 @@ public class Play extends BasicGameState{
 
 	@Override
 	public void init(GameContainer gameContainer, StateBasedGame sbGame) throws SlickException {
-		player	= new Player((int)GameParams.mapScreenX(50), (int)GameParams.mapScreenY(50));
-		
+		player	= new Player((int)GameParams.mapScreenX(50), (int)GameParams.mapScreenY(0));
 		level = (LevelObject) new LevelOne();
-		
 	}
 	
 
@@ -36,47 +34,28 @@ public class Play extends BasicGameState{
 		
 		for(Rectangle walls:level.getWalls()){
 			graph.draw(walls);
-			graph.fill(walls);
+			//graph.fill(walls);
 		}
-		
-
 	}
 
 	@Override
 	public void update(GameContainer gameContainer, StateBasedGame sbGame, int delta) throws SlickException {
-		player.update(gameContainer, sbGame, delta);
-				
+		player.update(gameContainer, sbGame, delta, level.getWalls().get(0));
 		getInput();
-		testGoal();
-	}
-	
-	private void testGoal(){
-		if(level.getGoal().intersects(player.getRect())){
-			System.exit(0);
-		}
 	}
 	
 	private void getInput(){
-	
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-			if(!checkWalls(Keyboard.KEY_UP))
-				player.move(Keyboard.KEY_UP);
-				
-		}	
-		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){	
-			if(!checkWalls(Keyboard.KEY_DOWN))
-				player.move(Keyboard.KEY_DOWN);
-		}		
+			
 		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 			if(!checkWalls(Keyboard.KEY_LEFT))
 				player.move(Keyboard.KEY_LEFT);
-		}				
+		}		
+		
 		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
 			if(!checkWalls(Keyboard.KEY_RIGHT))
 				player.move(Keyboard.KEY_RIGHT);
 		}
 	}
-
 	
 	private boolean checkWalls(int direction){
 		for(Rectangle walls:level.getWalls()){
